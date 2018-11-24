@@ -26,11 +26,11 @@ io.on("connection", function(socket) {
 
   // mobile app
   socket.on("client-state-on", data => {
-    socket.emit("client-state-on", data);
+    // socket.emit("client-state-on", data);
   });//true
 
   socket.on("client-state-off", data => {
-    socket.emit("client-state-off", data);
+    // socket.emit("client-state-off", data);
   });//false
 
   setInterval(function() {
