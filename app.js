@@ -27,7 +27,7 @@ io.on('connection', function (socket) {
     socket.emit('message-sender', data)
   });
   setInterval(function () {
-    socket.emit('sleepy', "doSomeThingFunny !")
+    socket.emit('sleepy', "doSomeThingFunny!")
   }, 20000)
   socket.on('stayWithMe', (data) => console.log(data))
 });
