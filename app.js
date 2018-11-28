@@ -5,7 +5,7 @@ const http = require("http");
 const express = require("express"),
   app = (module.exports.app = express());
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 let server = http.createServer(app);
 
 const io = require('socket.io').listen(server); //pass a http.Server instance
@@ -24,7 +24,7 @@ mongoose.Promise = global.Promise;
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
 
 //cors configs
-const cors = require("cors");
+const cors = require('cors');
 app.use(function(req, res, next) {
   var allowedOrigins = ['http://localhost:1234', 'http://aaa.com'];
   var origin = req.headers.origin;
@@ -73,7 +73,7 @@ io.on('connection', function (socket) {
 //app configs
 app.get('/', (req, res) => res.sendFile(INDEX));
 
-app.use('/', require('./routes/api-routes'));
-app.use('/', require('./routes/auth-routes'));
+app.use('/api', require('./routes/api-routes'));
+app.use('/auth', require('./routes/auth-routes'));
 
 
