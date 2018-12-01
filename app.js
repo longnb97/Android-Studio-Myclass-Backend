@@ -3,7 +3,7 @@
 require('dotenv').config();
 const http = require("http");
 const express = require("express"),
-  app = (express()),
+  app = (express());
 
 const logger = require('morgan');
 const bodyParser = require('body-parser');
