@@ -71,6 +71,7 @@ app.use(function (req, res, next) {
 //app configs
 app.use(jwtCheck.unless({
   path:[
+    '/',
     '/auth',
     '/auth/login',
     '/auth/logout',
