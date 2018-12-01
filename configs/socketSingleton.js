@@ -6,18 +6,13 @@ const SocketSingleton = (function () {
         this.io = socket.listen(server);
     }
     this.emit = function (topic, data) {
-        io.emit(topic, data);
-    }
-    this.on = function (topic) {
-        io.on(topic, (data) => {
-            console.log(data)
-        });
+        this.io.emit(topic, data);
     }
 
-    this.connectEvent = function () {
+    this.connectEvent = function (socketInfo) {
         this.emit('connect-event', 'connected');
         console.log(`*`);
-        console.log(`${socket.id}:  (Connected)`);
+        console.log(`${socketInfo.id}:  (Connected)`);
     }
     this.disconnectEvent = function (socketInfo) {
         this.emit('disconnect-event', 'disconnected');

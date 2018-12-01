@@ -12,14 +12,14 @@
     <script src="socket.io/socket.io.js"></script>
     <title>Document</title>
     <script>
-        var Root = 'http://localhost:5050'
+        var root = 'http://localhost:5050'
         // var Root = 'https://socketiot.herokuapp.com',
-        var socket = io(Root)
+        var socket = io(root)
 
         socket.on('server', (data) => {
             console.log(data)
         })
-        socket.on('test', (data) => {
+        socket.on('emitt', (data) => {
             console.log(data);
         })
         socket.on('connect-event', (data) => {
@@ -28,13 +28,10 @@
         socket.on('disconnect-event', (data) => {
             console.log(data);
         })
-        socket.on('serveremit', (data) => {
-            console.log(data);
-        })
         $(document).ready(() => {
             $('.click').click(function () {
                 $.ajax({
-                    url: `${Root}/api/users/action?topic=server&data=yoloz`,
+                    url: `${root}/api/users/action?topic=server&data=yoloz`,
                     type: 'GET',
                     success: (data) => console.log(data),
                     error: (err) => console.log(err)
@@ -42,13 +39,13 @@
             })
             $('.test').click(function () {
                 $.ajax({
-                    url: `${Root}/api/users/emit`,
+                    url: `${root}/api/users/emit`,
                     type: 'GET',
                     success: (data) => console.log(data),
                     error: (err) => console.log(err)
                 })
             })
-            $('.emitToServer').click(function () {
+            $('#emitToServer').click(function () {
                 socket.emit('serveremit','hello-server!');
             })
         })
@@ -60,7 +57,7 @@
     <h1>NavBar em ei </h1>
     <button class="click">action</button>
     <button class="test">normal</button>
-    <button class="emitToServer">emit to server </button>
+    <button id="emitToServer">emit to server </button>
 </body>
 
 </html>
