@@ -39,6 +39,8 @@ app.use(function(req, res, next) {
 });
 
 //app configs
+app.io = io;
+app.use(express.static('public'));
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -51,6 +53,10 @@ mongoose.connect(
 
 //Socket io configs
 io.on('connection', function (socket) {
+
+  //test
+  socket.emit('server','serverData');
+
   //setup socketio connect, disconnect 
   console.log(`${socket.id}:  Đã kết nối(Connected)`);
   socket.on('disconnect', () =>

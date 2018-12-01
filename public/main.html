@@ -11,27 +11,43 @@
     <script src="socket.io/socket.io.js"></script>
     <title>Document</title>
     <script>
-        var Root = 'http://localhost:3030'
+        var Root = 'https://socketiot.herokuapp.com/'
         var socket = io(Root)
-        
-        socket.on('Server-data', (data) => {
+
+        socket.on('server', (data) => {
             $('.content').append(`
                 <span>${data}</span><br>
                 
             `)
         })
-        $(document).ready(() => {
-            $('.click').click(function(){
-                socket.emit("Client-data", "Hello !")
+
+        socket.on('test', (data) => {
+            $('.content').append(`
+                <span>${data}</span><br>
+                
+            `)
+
+            $(document).ready(() => {
+                $('.click').click(function () {
+                    socket.emit("Client-data", "Hello !")
+                })
+                $('.test').click(function () {
+                    $.ajax({
+                        url: `${Root}/api/users/emit`,
+                        type: ' GET',
+                        success: (data) => console.log(data),
+                        error: (err) => console.log(err)
+                    })
+                })
             })
-        })
 
     </script>
 </head>
 
 <body>
     <h1>NavBar em ei </h1>
-    <button class="click"></button>
+    <button class="click">Click me</button>
+    <button class="test">test</button>
 
 </body>
 
