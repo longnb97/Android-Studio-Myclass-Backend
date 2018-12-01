@@ -5,32 +5,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="shortcut icon" href="">
+    <link rel="icon" type="image/png" href="http://example.com/myicon.png">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="socket.io/socket.io.js"></script>
     <title>Document</title>
     <script>
-        var Root = 'https://socketiot.herokuapp.com'
+        var Root = 'http://localhost:5050'
+        // var Root = 'https://socketiot.herokuapp.com',
         var socket = io(Root)
 
         socket.on('server', (data) => {
-            $('.content').append(`
-                <span>${data}</span><br>
-                
-            `)
+            console.log(data)
         })
-        socket.on('server', (data) => {
-            $('.content').append(`
-                <span>${data}</span><br>
-                
-            `)
+        socket.on('test', (data) => {
+            console.log(data);
         })
-
+        socket.on('connect-event', (data) => {
+            console.log(data);
+        })
+        socket.on('disconnect-event', (data) => {
+            console.log(data);
+        })
+        socket.on('serveremit', (data) => {
+            console.log(data);
+        })
         $(document).ready(() => {
             $('.click').click(function () {
-                socket.emit("Client-data", "Hello !")
+                $.ajax({
+                    url: `${Root}/api/users/action?topic=server&data=yoloz`,
+                    type: 'GET',
+                    success: (data) => console.log(data),
+                    error: (err) => console.log(err)
+                })
             })
             $('.test').click(function () {
                 $.ajax({
@@ -40,6 +48,9 @@
                     error: (err) => console.log(err)
                 })
             })
+            $('.emitToServer').click(function () {
+                socket.emit('serveremit','hello-server!');
+            })
         })
 
     </script>
@@ -47,9 +58,9 @@
 
 <body>
     <h1>NavBar em ei </h1>
-    <button class="click">Click me</button>
-    <button class="test">test</button>
-
+    <button class="click">action</button>
+    <button class="test">normal</button>
+    <button class="emitToServer">emit to server </button>
 </body>
 
 </html>
