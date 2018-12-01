@@ -12,7 +12,7 @@
     <script src="socket.io/socket.io.js"></script>
     <title>Document</title>
     <script>
-        var root = 'http://localhost:5050'
+        var root = process.env.ROOT ||'http://localhost:5050'
         // var Root = 'https://socketiot.herokuapp.com',
         var socket = io(root)
 
