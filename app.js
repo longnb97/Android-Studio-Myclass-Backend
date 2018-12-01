@@ -72,7 +72,7 @@ app.use(function (req, res, next) {
 app.use(jwtCheck.unless({
   path:[
     '/',
-    '/pulbic',
+    '/public',
     '/auth',
     '/auth/login',
     '/auth/logout',
