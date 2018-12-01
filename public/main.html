@@ -20,26 +20,26 @@
                 
             `)
         })
-
-        socket.on('test', (data) => {
+        socket.on('server', (data) => {
             $('.content').append(`
                 <span>${data}</span><br>
                 
             `)
+        })
 
-            $(document).ready(() => {
-                $('.click').click(function () {
-                    socket.emit("Client-data", "Hello !")
-                })
-                $('.test').click(function () {
-                    $.ajax({
-                        url: `${Root}/api/users/emit`,
-                        type: ' GET',
-                        success: (data) => console.log(data),
-                        error: (err) => console.log(err)
-                    })
+        $(document).ready(() => {
+            $('.click').click(function () {
+                socket.emit("Client-data", "Hello !")
+            })
+            $('.test').click(function () {
+                $.ajax({
+                    url: `${Root}/api/users/emit`,
+                    type: ' GET',
+                    success: (data) => console.log(data),
+                    error: (err) => console.log(err)
                 })
             })
+        })
 
     </script>
 </head>
