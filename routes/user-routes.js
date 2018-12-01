@@ -9,7 +9,7 @@ router.use('/', (req, res, next) => {
 })
 
 router.use('/emit', (req, res) => {
-    req.router.emit('test','data');
+    req.router.emit('test','thanhcong');
 })
 
 module.exports = router;
