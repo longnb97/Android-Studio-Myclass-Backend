@@ -12,12 +12,12 @@
     <script src="socket.io/socket.io.js"></script>
     <title>Document</title>
     <script>
-        // var root ='http://localhost:5050'
-        var root = 'https://socketiot.herokuapp.com'
-        var socket = io(root)
+        // var root ='http://localhost:5050';
+        var root = 'https://socketiot.herokuapp.com';
+        var socket = io(root);
 
         socket.on('server', (data) => {
-            console.log(data)
+            console.log(data);
         })
         socket.on('emitt', (data) => {
             console.log(data);
