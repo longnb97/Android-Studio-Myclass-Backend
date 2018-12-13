@@ -28,7 +28,7 @@ const jwtCheck = jwt({
 
 jwtCheck.unless = unless;
 
-const PORT = process.env.PORT || 5050;
+const PORT = process.env.PORT || 5000;
 let server = http.Server(app); // http.createServer = http.Server
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
 
@@ -45,9 +45,9 @@ socketHelper.io.on('connection', (socket) => {
   //todos
   socket.on('serveremit', (data) => console.log(data));
   //data la ma the vidu: 423423423
-  socket.on('debug',(data)=>{
+  socket.on('debug', (data) => {
     UserHelper.updateTimee(data);
-    socket.emit('debug-message','ok');
+    socket.emit('debug-message', 'ok');
   })
 })
 
@@ -81,7 +81,9 @@ app.use(function (req, res, next) {
  * setting up jwt-unless
  */
 app.use(jwtCheck.unless({
-  path:[
+  path: [
+    '/cannot_get',
+    // '/unauthorized',
     '/',
     '/public',
     '/auth',
@@ -90,7 +92,7 @@ app.use(jwtCheck.unless({
     '/auth/fb',
     '/main.html',
     '/api/users/action',
-    '/api/users/',
+    '/api/users',
     '/api/users/11',
     '/api/users/12'
   ]
@@ -104,20 +106,28 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const INDEX = path.join(__dirname, 'index.html');
-app.get('/', (req, res) => res.sendFile(INDEX));
+app.get('/', (req, res) => res.send("Home Page"));
 
 app.use('/api', apiRoutes);
 app.use('/auth', require('./routes/auth-routes'));
-
+app.get('/cannot_get', (req, res) => res.send('ok'));
 /*
- * catch 404 and forward to error handler
+ * error handling
  */
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('invalid token...');
+  }
+});
+
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
-  next(err);
+  res.status(404).send("404 Not Found");
 });
+
+
+
 
 
 
