@@ -12,6 +12,8 @@ const path = require('path');
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
+const UserHelper = require('./helpers/user-helpers');
+
 const socketHelper = require('./configs/socketSingleton');
 const key = require('./configs/keys');
 const apiRoutes = require('./routes/api-routes');
@@ -42,9 +44,16 @@ socketHelper.io.on('connection', (socket) => {
   });
   //todos
   socket.on('serveremit', (data) => console.log(data));
+  //data la ma the vidu: 423423423
+  socket.on('debug',(data)=>{
+    UserHelper.updateTimee(data);
+    socket.emit('debug-message','ok');
+  })
 })
 
-//Mongoose setup
+/**
+ * setting up mongoose
+ */
 mongoose.connect(
   `mongodb://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@ds119734.mlab.com:19734/doandohoa`,
   { useNewUrlParser: true },
@@ -68,7 +77,9 @@ app.use(function (req, res, next) {
   return next();
 });
 
-//app configs
+/**
+ * setting up jwt-unless
+ */
 app.use(jwtCheck.unless({
   path:[
     '/',
@@ -78,7 +89,10 @@ app.use(jwtCheck.unless({
     '/auth/logout',
     '/auth/fb',
     '/main.html',
-    '/api/users/action'
+    '/api/users/action',
+    '/api/users/',
+    '/api/users/11',
+    '/api/users/12'
   ]
 }))
 
