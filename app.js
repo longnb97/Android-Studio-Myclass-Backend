@@ -13,23 +13,26 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 
 const UserHelper = require('./helpers/user-helpers');
-
 const socketHelper = require('./configs/socketSingleton');
+
 const key = require('./configs/keys');
+const config = require('./configs/keys');
+
 const apiRoutes = require('./routes/api-routes'),
   authRoutes = require('./routes/auth-routes'),
   oauthRoutes = require('./routes/oauth-routes');
 
 const jwt = require('express-jwt'),
-  unless = require('express-unless'),
-  config = require('./configs/keys');
+  unless = require('express-unless')
 
 const jwtCheck = jwt({
   secret: config.jwtSecret
 });
-
 jwtCheck.unless = unless;
 
+/*
+ * setting up server
+ */
 const PORT = process.env.PORT || 5050;
 let server = http.Server(app); // http.createServer = http.Server
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
@@ -51,7 +54,7 @@ socketHelper.io.on('connection', (socket) => {
 
   //debugger
   socket.on('debug', (data) => {
-    UserHelper.updateTimee(data);
+    console.log(data)
     socket.emit('debug-message', 'ok');
   })
 
@@ -116,6 +119,7 @@ app.use(jwtCheck.unless({
     '/main.html',
     '/api/users/action',
     '/api/users',
+    '/api/users/socket_emit',
     ///////////
     '/public/',
     '/auth/',

@@ -19,8 +19,9 @@
         socket.on('server', (data) => {
             console.log(data);
         })
-        socket.on('emitt', (data) => {
+        socket.on('debugg', (data) => {
             console.log(data);
+            socket.emit('debug',data);
         })
         socket.on('connect-event', (data) => {
             console.log(data);

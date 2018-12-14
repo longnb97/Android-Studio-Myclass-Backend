@@ -9,20 +9,16 @@ const socket = require('../configs/socketSingleton');
 const UserHelper = require('../helpers/user-helpers');
 const UserMiddleware = require('../middlewares/user-middlewares');
 
-router.get('/', UserMiddleware.isAdmin, UserHelper.getSchedule);
+router.get('/socket_emit', emit);
+router.get('/:id', UserHelper.getSelfSchedule);
+router.get('/', UserMiddleware.isAdmin, UserHelper.getAllSchedule);
 router.post('/', UserHelper.createAccount);
 router.put('/:cardNumber', UserHelper.updateTime);
 
-router.get('/emit', (req, res) => {
-    socket.emit('announce', 'announced');
-    res.send('request sent');
-});
 
-router.get('/action', (req, res) => {
+function emit(req, res) {
     socket.emit(req.query.topic, req.query.data);
-    res.send('request sent');
-});
-
-
+    res.status(200).send('request sent');
+}
 
 module.exports = router;

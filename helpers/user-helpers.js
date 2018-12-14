@@ -6,7 +6,8 @@ const User = require('../models/user-model');
 module.exports = {
     createAccount,
     updateTime,
-    getSchedule,
+    getAllSchedule,
+    getSelfSchedule,
     isExisted,
     updateTimee,
 }
@@ -48,13 +49,19 @@ function updateTime(req, res) {
         .catch(err => res.status(500).json(err))
 }
 
-function getSchedule(req, res) {
-    User.find()
+
+function getSelfSchedule(req, res) {
+    const id = req.params.id;
+    User.findOne(id)
         .then(userFound => {
-            if (!userFound) res.status(404).json({ message: "Not Found" });
-            else res.status(200).json({ message: "Users Found", userFound });
+            if (!userFound) res.status(404).json({ message: "user not found" })
+            else if (userFound && userFound.schedule) {
+                let userSchedule = userFound.schedule;
+                res.status(200).json({ message: "found", userSchedule })
+            }
+            else res.status(204).json({ message: "schedule empty" })
         })
-        .catch(error => res.status(500).json(err));
+        .catch(err => res.status(500).json(err));
 }
 
 function updateTimee(data) {
@@ -91,4 +98,15 @@ function isExisted(cardNumber) {
             else return false
         })
         .catch(err => res.status(500).json(err))
+}
+
+//admin only
+function getAllSchedule(req, res) {
+    User.find()
+        .sort({ cardNumber: -1 }) //sort card number by descending order
+        .then(userFound => {
+            if (!userFound) res.status(404).json({ message: "Not Found" });
+            else res.status(200).json({ message: "Users Found", userFound });
+        })
+        .catch(error => res.status(500).json(err));
 }
