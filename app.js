@@ -116,10 +116,10 @@ app.use(jwtCheck.unless({
     '/oauth/login',
     '/oauth/logout',
     '/oauth/fb',
-    '/main.html',
-    '/api/users/action',
     '/api/users',
     '/api/users/socket_emit',
+    '/main.html',
+    '/index.html',
     '/favicon.ico',
 
     '/api/users/1/',
@@ -146,7 +146,8 @@ app.use(function (req, res, next) {
 /*
  * setting up routes
  */
-app.get('/', (req, res) => res.send("Home Page"));
+const homePage = path.resolve(__dirname, '/public/index.html');
+app.get('/', (req, res) => res.sendFile(homePage));
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
 app.use('/oauth', oauthRoutes);
