@@ -146,6 +146,11 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(function (req, res, next) {
+  if (req.originalUrl && req.originalUrl.split("/").pop() === 'favicon.ico') return res.sendStatus(204);
+  return next();
+});
+
 app.get('/', (req, res) => res.send("Home Page"));
 
 app.use('/api', apiRoutes);
@@ -166,9 +171,4 @@ app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   res.status(404).send("404 Not Found");
-});
-
-app.use(function (req, res, next) {
-  if (req.originalUrl && req.originalUrl.split("/").pop() === 'favicon.ico') return res.sendStatus(204);
-  return next();
 });
