@@ -106,7 +106,7 @@ app.use(function (req, res, next) {
 app.use(jwtCheck.unless({
   path: [
     '/cannot_get',
-    // '/unauthorized',
+    '/unauthorized',
     '/',
     '/public',
     '/auth',
@@ -121,54 +121,50 @@ app.use(jwtCheck.unless({
     '/api/users',
     '/api/users/socket_emit',
     '/favicon.ico',
-    ///////////
-    '/public/',
-    '/auth/',
-    '/auth/login/',
-    '/auth/logout/',
-    '/oauth/',
-    '/oauth/login/',
-    '/oauth/logout/',
-    '/oauth/fb/',
-    '/main.html/',
-    '/api/users/action/',
-    '/api/users/',
+
     '/api/users/1/',
     '/api/users/2/'
   ]
 }))
 
 /*
- * setting up express.js
+ * setting up libraries
  */
 app.use(express.static('public'));
 app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+/*
+ * catch "favicon.ico missing" error
+ */
 app.use(function (req, res, next) {
   if (req.originalUrl && req.originalUrl.split("/").pop() === 'favicon.ico') return res.sendStatus(204);
   return next();
 });
 
+/*
+ * setting up routes
+ */
 app.get('/', (req, res) => res.send("Home Page"));
-
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
 app.use('/oauth', oauthRoutes);
-app.get('/cannot_get', (req, res) => res.send('ok'));
 
 /*
- * error handling
+ * catch "404" error
  */
-app.use(function (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    res.status(401).send('invalid token...');
-  }
-});
-
 app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   res.status(404).send("404 Not Found");
+});
+
+/*
+ * catch "UnauthorizedError" error
+ */
+app.use(function (err, req, res, next) {
+  if (err.name === 'UnauthorizedError') {
+    res.status(401).send('Invalid token');
+  }
 });
