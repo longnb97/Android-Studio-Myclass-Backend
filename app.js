@@ -16,7 +16,9 @@ const UserHelper = require('./helpers/user-helpers');
 
 const socketHelper = require('./configs/socketSingleton');
 const key = require('./configs/keys');
-const apiRoutes = require('./routes/api-routes');
+const apiRoutes = require('./routes/api-routes'),
+  authRoutes = require('./routes/auth-routes'),
+  oauthRoutes = require('./routes/oauth-routes');
 
 const jwt = require('express-jwt'),
   unless = require('express-unless'),
@@ -32,26 +34,43 @@ const PORT = process.env.PORT || 5000;
 let server = http.Server(app); // http.createServer = http.Server
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
 
-/**
+/*
  * setting up socket.io : singleton design pattern
  */
 socketHelper.configure(server);
 socketHelper.io.on('connection', (socket) => {
+
   // on connection, disconnection
   socketHelper.connectEvent(socket);
   socket.on('disconnect', () => {
     socketHelper.disconnectEvent(socket);
   });
+
   //todos
   socket.on('serveremit', (data) => console.log(data));
-  //data la ma the vidu: 423423423
+
+  //debugger
   socket.on('debug', (data) => {
     UserHelper.updateTimee(data);
     socket.emit('debug-message', 'ok');
   })
+
+  // event quet the
+  socket.on('card', async (cardNumber) => {
+    let userExisted = await UserHelper.isExisted(cardNumber);
+    if (!userExisted) socket.emit('account-create', 'user not found, navigate to register route')
+    else {
+      //check in or check out
+      let updateQueue = await UserHelper.updateTimee(cardNumber);
+      socket.emit('response', 'time updated')
+    }
+  })
+
+  //
+
 })
 
-/**
+/*
  * setting up mongoose
  */
 mongoose.connect(
@@ -60,12 +79,13 @@ mongoose.connect(
   err => { if (!err) console.log('DB CONNECT SUCCESS') }
 )
 
-/**
+/*
  * setting up cors & jwt
  */
 const cors = require('cors');
 app.use(function (req, res, next) {
-  var allowedOrigins = ['http://localhost:1234', 'http://localhost:4200', 'http://localhost:4300'];
+  // orgins that are allowed to make a request to server
+  var allowedOrigins = ['http://localhost:1234', 'http://localhost:4200', 'http://localhost:4300', 'http://localhost:5000'];
   var origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -77,7 +97,7 @@ app.use(function (req, res, next) {
   return next();
 });
 
-/**
+/*
  * setting up jwt-unless
  */
 app.use(jwtCheck.unless({
@@ -89,7 +109,10 @@ app.use(jwtCheck.unless({
     '/auth',
     '/auth/login',
     '/auth/logout',
-    '/auth/fb',
+    '/oauth',
+    '/oauth/login',
+    '/oauth/logout',
+    '/oauth/fb',
     '/main.html',
     '/api/users/action',
     '/api/users',
@@ -98,7 +121,7 @@ app.use(jwtCheck.unless({
   ]
 }))
 
-/**
+/*
  * setting up express.js
  */
 app.use(express.static('public'));
@@ -109,8 +132,10 @@ app.use(bodyParser.json());
 app.get('/', (req, res) => res.send("Home Page"));
 
 app.use('/api', apiRoutes);
-app.use('/auth', require('./routes/auth-routes'));
+app.use('/auth', authRoutes);
+app.use('/oauth', oauthRoutes);
 app.get('/cannot_get', (req, res) => res.send('ok'));
+
 /*
  * error handling
  */
