@@ -120,6 +120,7 @@ app.use(jwtCheck.unless({
     '/api/users/action',
     '/api/users',
     '/api/users/socket_emit',
+    '/favicon.ico',
     ///////////
     '/public/',
     '/auth/',
@@ -166,7 +167,6 @@ app.use(function (req, res, next) {
   err.status = 404;
   res.status(404).send("404 Not Found");
 });
-
 
 
 

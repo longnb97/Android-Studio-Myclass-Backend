@@ -8,7 +8,7 @@ function isAdmin(req, res, next) {
     const email = req.body.email;
     User.findOne({ email })
         .then(userFound => {
-            if (!userFound) res.status(400).json({ message: 'bad request' });
+            if (!userFound) res.status(400).json({ message: 'missing email' });
             else {
                 if (userFound.role === 'admin') next();
                 else res.status(403).json({message:"method not allowed"});
