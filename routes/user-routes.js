@@ -7,8 +7,9 @@ const router = express.Router();
 
 const socket = require('../configs/socketSingleton');
 const UserHelper = require('../helpers/user-helpers');
+const UserMiddleware = require('../middlewares/user-middlewares');
 
-router.get('/', UserHelper.getSchedule);
+router.get('/', UserMiddleware.isAdmin, UserHelper.getSchedule);
 router.post('/', UserHelper.createAccount);
 router.put('/:cardNumber', UserHelper.updateTime);
 

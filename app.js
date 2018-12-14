@@ -30,7 +30,7 @@ const jwtCheck = jwt({
 
 jwtCheck.unless = unless;
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5050;
 let server = http.Server(app); // http.createServer = http.Server
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
 
@@ -116,8 +116,20 @@ app.use(jwtCheck.unless({
     '/main.html',
     '/api/users/action',
     '/api/users',
-    '/api/users/11',
-    '/api/users/12'
+    ///////////
+    '/public/',
+    '/auth/',
+    '/auth/login/',
+    '/auth/logout/',
+    '/oauth/',
+    '/oauth/login/',
+    '/oauth/logout/',
+    '/oauth/fb/',
+    '/main.html/',
+    '/api/users/action/',
+    '/api/users/',
+    '/api/users/1/',
+    '/api/users/2/'
   ]
 }))
 

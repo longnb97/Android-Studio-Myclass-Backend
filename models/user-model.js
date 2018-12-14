@@ -6,6 +6,7 @@ const AccountSchema = new Schema({
     hashPassword: String,
     avatarUrl: { type: String, default: "default.img" },
     cardNumber: { type: Number, unique: true },
+    role: { type: String, enum: ['admin', 'user'], default: 'admin' },
     facebookId: { type: String },
     googleId: { type: String },
     facebookToken: { type: String },
@@ -17,8 +18,7 @@ const AccountSchema = new Schema({
     }],
     status: { type: String, enum: ['in', 'out', ' '], default: 'out' }
 }, {
-        timestamps: false,
-        versionKey: false
+        timestamps: false
     });
 
 module.exports = mongoose.model("user", AccountSchema);
