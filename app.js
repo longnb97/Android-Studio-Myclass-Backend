@@ -168,11 +168,7 @@ app.use(function (req, res, next) {
   res.status(404).send("404 Not Found");
 });
 
-app.use('/favicon.ico', function (req, res, next) {
-  if (req.originalUrl === '/favicon.ico') res.status(204);
-  else next();
+app.use(function (req, res, next) {
+  if (req.originalUrl && req.originalUrl.split("/").pop() === 'favicon.ico') return res.sendStatus(204);
+  return next();
 });
-
-
-
-
