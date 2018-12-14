@@ -17,6 +17,7 @@ const socketHelper = require('./configs/socketSingleton');
 
 const key = require('./configs/keys');
 const config = require('./configs/keys');
+const homePage = path.resolve(__dirname, '/public/index.html');
 
 const apiRoutes = require('./routes/api-routes'),
   authRoutes = require('./routes/auth-routes'),
@@ -146,7 +147,6 @@ app.use(function (req, res, next) {
 /*
  * setting up routes
  */
-const homePage = path.resolve(__dirname, '/public/index.html');
 app.get('/', (req, res) => res.sendFile(homePage));
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
