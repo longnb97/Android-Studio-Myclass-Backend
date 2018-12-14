@@ -169,7 +169,7 @@ app.use(function (req, res, next) {
 });
 
 
-
+app.get('/favicon.ico', res.status(204).send());
 
 
 
