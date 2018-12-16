@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt'),
+const bcrypt = require('bcrypt-nodejs'),
     saltRounds = 10;
 
 const User = require('../models/user-model');
