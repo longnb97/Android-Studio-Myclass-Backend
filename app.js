@@ -54,10 +54,11 @@ app.use(session({
 
 //keep user logged in 
 const sessionChecker = (req, res, next) => {
-  if (req.session.user) res.json({ message: " user logged in, navigate to dashboard" });
-  else next();
+  if (req.session.user) res.send({ message: " user logged in, navigate to dashboard" });
+  else res.send('navigate to login route');
 };
-app.get('/', sessionChecker, (req, res) => res.json('navigate to login route'));
+
+app.get('/', sessionChecker);
 
 /*
  * setting up socket.io : singleton design pattern
@@ -70,9 +71,6 @@ socketHelper.io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     socketHelper.disconnectEvent(socket);
   });
-
-  //todos
-  socket.on('serveremit', (data) => console.log(data));
 
   //debugger
   socket.on('debug', (data) => {
@@ -91,8 +89,7 @@ socketHelper.io.on('connection', (socket) => {
     }
   })
 
-  //
-
+  //comming soon
 })
 
 /*
@@ -105,7 +102,7 @@ mongoose.connect(
 )
 
 /*
- * setting up cors & jwt
+ * setting up cors
  */
 const cors = require('cors');
 app.use(function (req, res, next) {
@@ -129,7 +126,7 @@ app.use(jwtCheck.unless({
   path: [
     '/cannot_get',
     '/unauthorized',
-    '/homepage',
+    '/index.html',
     '/',
     '/public',
     '/auth',
@@ -169,7 +166,6 @@ app.use(function (req, res, next) {
 /*
  * setting up routes
  */
-app.get('/homepage', (req, res) => res.sendFile(homePage));
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
 // app.use('/oauth', oauthRoutes);
