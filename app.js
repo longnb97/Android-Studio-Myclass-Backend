@@ -8,6 +8,7 @@ const express = require("express"),
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
+const session = require('express-session');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -39,6 +40,26 @@ let server = http.Server(app); // http.createServer = http.Server
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
 
 /*
+ * session configs
+ */
+app.use(session({
+  secret: key.session,
+  resave: false,
+  saveUninitialized: true,
+  cookie: {
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24
+  }
+}))
+
+//keep user logged in 
+const sessionChecker = (req, res, next) => {
+  if (req.session.user) res.json({ message: " user logged in, navigate to dashboard" });
+  else next();
+};
+app.get('/', sessionChecker, (req, res) => res.json('navigate to login route'));
+
+/*
  * setting up socket.io : singleton design pattern
  */
 socketHelper.configure(server);
@@ -62,11 +83,11 @@ socketHelper.io.on('connection', (socket) => {
   // event quet the
   socket.on('card', async (cardNumber) => {
     let userExisted = await UserHelper.isExisted(cardNumber);
-    if (!userExisted) socket.emit('account-create', 'user not found, navigate to register route')
+    if (!userExisted) socket.emit('update-error', 'not found'); //mobile app response
     else {
       //check in or check out
       let updateQueue = await UserHelper.updateTimee(cardNumber);
-      socket.emit('response', 'time updated')
+      socket.emit('mobile-response', { updateQueue, message: 'time updated' }); //mobile app response
     }
   })
 
@@ -88,7 +109,7 @@ mongoose.connect(
  */
 const cors = require('cors');
 app.use(function (req, res, next) {
-  // orgins that are allowed to make a request to server
+  // origins that are allowed to make a request to server
   var allowedOrigins = ['http://localhost:1234', 'http://localhost:4200', 'http://localhost:4300', 'http://localhost:5000'];
   var origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
@@ -117,14 +138,12 @@ app.use(jwtCheck.unless({
     '/oauth/login',
     '/oauth/logout',
     '/oauth/fb',
-    '/api/users',
+    // '/api/users',
     '/api/users/socket_emit',
     '/main.html',
     '/index.html',
     '/favicon.ico',
-
-    '/api/users/1/',
-    '/api/users/2/'
+    '/auth/session',
   ]
 }))
 
@@ -147,10 +166,10 @@ app.use(function (req, res, next) {
 /*
  * setting up routes
  */
-app.get('/', (req, res) => res.sendFile(homePage));
+app.get('/homepage', (req, res) => res.sendFile(homePage));
 app.use('/api', apiRoutes);
 app.use('/auth', authRoutes);
-app.use('/oauth', oauthRoutes);
+// app.use('/oauth', oauthRoutes);
 
 /*
  * catch "404" error

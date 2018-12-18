@@ -1,6 +1,6 @@
 module.exports = {
-    facebook: {
-
-    },
-    jwtSecret:'maythetokenbewithyou'
+    facebook: {},
+    google:{},
+    jwtSecret:'maythetokenbewithyou',
+    session:'thetrickonyou'
 }

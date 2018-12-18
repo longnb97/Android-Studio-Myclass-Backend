@@ -13,11 +13,10 @@ const UserMiddleware = require('../middlewares/user-middlewares');
 //   request method get to this route:  server will automatically emit to topic 'yo' with data 'hello' 
 router.get('/socket_emit', emit);
 
-router.get('/:id', UserHelper.getSelfSchedule);
-router.get('/', UserMiddleware.isAdmin, UserHelper.getAllSchedule);
+router.get('/', UserMiddleware.haveAccessToDatabase, UserHelper.getAllSchedule);
+router.get('/:id', UserHelper.getSelfSchedule); //params
 router.post('/', UserHelper.createAccount);
-router.put('/:cardNumber', UserHelper.updateTime);
-
+router.put('/', UserHelper.updateTime);  // update url using query  ex: https://socketiot.herokuapp.com/api/users?id=1234567890
 
 function emit(req, res) {
     socket.emit(req.query.topic, req.query.data);

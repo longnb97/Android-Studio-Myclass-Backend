@@ -19,12 +19,12 @@ function createAccount(req, res) {
     let newUser = new User(info);
     newUser.save()
         .then(user => res.send(user))
-        .catch(err => res.send(err))
+        .catch(err => res.send(err));
 }
 
 function updateTime(req, res) {
     let now = new Date();
-    User.findOne({ cardNumber: req.params.cardNumber })
+    User.findById(req.query.id)
         .then(userfound => {
             if (!userfound) res.status(404).json({ user: userfound })
             else {
@@ -42,11 +42,11 @@ function updateTime(req, res) {
                     userfound.status = 'in';
                     return userfound.save();
                 }
-                else res.status(400).json({ message: 'Bad request' })
+                else res.status(400).json({ message: 'Bad request' });
             }
         })
         .then(updatedTime => res.status(200).json({ message: 'updated', updatedTime }))
-        .catch(err => res.status(500).json(err))
+        .catch(err => res.status(500).json(err));
 }
 
 
@@ -57,9 +57,9 @@ function getSelfSchedule(req, res) {
             if (!userFound) res.status(404).json({ message: "user not found" })
             else if (userFound && userFound.schedule) {
                 let userSchedule = userFound.schedule;
-                res.status(200).json({ message: "found", userSchedule })
+                res.status(200).json({ message: "found", userSchedule });
             }
-            else res.status(204).json({ message: "schedule empty" })
+            else res.status(204).json({ message: "schedule empty" });
         })
         .catch(err => res.status(500).json(err));
 }
@@ -68,7 +68,7 @@ function updateTimee(data) {
     let now = new Date();
     User.findOne({ cardNumber: data })
         .then(userfound => {
-            if (!userfound) res.status(404).json({ user: userfound })
+            if (!userfound) res.status(404).json({ user: userfound });
             else {
                 if (userfound.status === 'in') {
                     // update checkOut time
@@ -84,25 +84,26 @@ function updateTimee(data) {
                     userfound.status = 'in';
                     return userfound.save();
                 }
-                else res.status(400).json({ message: 'Bad request' })
+                else res.status(400).json({ message: 'Bad request' });
             }
         })
         .then(updatedTime => res.status(200).json({ message: 'updated', updatedTime }))
-        .catch(err => res.status(500).json(err))
+        .catch(err => res.status(500).json(err));
 }
 
 function isExisted(cardNumber) {
     User.findOne({ cardNumber })
         .then(userFound => {
-            if (userFound && userFound.cardNumber && userFound.email) return true
-            else return false
+            if (userFound && userFound.cardNumber && userFound.email) return true;
+            else return false;
         })
-        .catch(err => res.status(500).json(err))
+        .catch(err => res.status(500).json(err));
 }
 
 //admin only
 function getAllSchedule(req, res) {
     User.find()
+        .select('avatarUrl appearance role email displayName cardNumber _id')
         .sort({ cardNumber: -1 }) //sort card number by descending order
         .then(userFound => {
             if (!userFound) res.status(404).json({ message: "Not Found" });
