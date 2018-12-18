@@ -129,6 +129,7 @@ app.use(jwtCheck.unless({
   path: [
     '/cannot_get',
     '/unauthorized',
+    '/homepage',
     '/',
     '/public',
     '/auth',
