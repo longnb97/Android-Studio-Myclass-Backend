@@ -4,15 +4,16 @@ const bcrypt = require('bcrypt'),
 const User = require('../models/user-model');
 
 module.exports = {
-    createAccount,
+    createAdminAccount,
+    createUserAccount,
     updateTime,
     getAllSchedule,
     getSelfSchedule,
-    isExisted,
+    // isExisted,
     updateTimee,
 }
 
-function createAccount(req, res) {
+function createUserAccount(req, res) {
     const { displayName, password, cardNumber, email } = req.body;
     var hashPassword = bcrypt.hashSync(password, saltRounds);
     const info = { displayName, hashPassword, cardNumber, email };
@@ -28,7 +29,14 @@ function updateTime(req, res) {
         .then(userfound => {
             if (!userfound) res.status(404).json({ user: userfound })
             else {
-                if (userfound.status === 'in') {
+                if (userfound.status === ' ') {
+                    // update checkOut time
+                    let data = { checkIn: now, checkOut: 'null' };
+                    userfound.appearance.push(data);
+                    userfound.status = 'in';
+                    return userfound.save();
+                }
+                else if (userfound.status === 'in') {
                     // update checkOut time
                     let lastIndex = userfound.appearance.length - 1;
                     userfound.appearance[lastIndex].checkOut = now;
@@ -91,15 +99,6 @@ function updateTimee(data) {
         .catch(err => res.status(500).json(err));
 }
 
-function isExisted(cardNumber) {
-    User.findOne({ cardNumber })
-        .then(userFound => {
-            if (userFound && userFound.cardNumber && userFound.email) return true;
-            else return false;
-        })
-        .catch(err => res.status(500).json(err));
-}
-
 //admin only
 function getAllSchedule(req, res) {
     User.find()
@@ -111,3 +110,23 @@ function getAllSchedule(req, res) {
         })
         .catch(error => res.status(500).json(err));
 }
+
+function createAdminAccount(req, res) {
+    const { displayName, password, cardNumber, email } = req.body;
+    var hashPassword = bcrypt.hashSync(password, saltRounds);
+    const info = { displayName, hashPassword, cardNumber, email, role:"admin" };
+    let newUser = new User(info);
+    newUser.save()
+        .then(user => res.send(user))
+        .catch(err => res.send(err));
+}
+
+
+// function isExisted(cardNumber) {
+//     User.findOne({ cardNumber })
+//         .then(userFound => {
+//             if (userFound && userFound.cardNumber && userFound.email) return true;
+//             else return false;
+//         })
+//         .catch(err => res.status(500).json(err));
+// }

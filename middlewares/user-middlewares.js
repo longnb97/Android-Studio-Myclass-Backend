@@ -1,10 +1,10 @@
 const User = require('../models/user-model');
 
 module.exports = {
-    haveAccessToDatabase
+    isAdmin
 }
 
-function haveAccessToDatabase(req, res, next) {
+function isAdmin(req, res, next) {
     if (!req.session.user || !req.session.user.email || !req.session.user.role) res.status(403).json({ message: 'method not allowed' });
     else {
         if (req.session.user.role === 'admin') next();

@@ -140,6 +140,8 @@ app.use(jwtCheck.unless({
     '/oauth/logout',
     '/oauth/fb',
     // '/api/users',
+    '/api/users/basic',
+    '/api/users/admin',
     '/api/users/socket_emit',
     '/main.html',
     '/index.html',
