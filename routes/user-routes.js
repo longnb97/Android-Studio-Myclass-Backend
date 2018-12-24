@@ -9,9 +9,9 @@ const socket = require('../configs/socketSingleton');
 const UserHelper = require('../helpers/user-helpers');
 const UserMiddleware = require('../middlewares/user-middlewares');
 
-
 router.get('/socket_emit', emit);   // "https://socketiot.herokuapp.com/api/users/socket_emit?topic=yo&data=hello" 
-                                    // make request (get) to this route: server will emit to topic 'yo' with data 'hello'  
+// make request (get) to this route: server will emit to topic 'yo' with data 'hello'  
+
 
 router.get('/', UserMiddleware.isAdmin, UserHelper.getAllSchedule);
 router.get('/:id', UserHelper.getSelfSchedule); //params

@@ -19,9 +19,8 @@
         socket.on('server', (data) => {
             console.log(data);
         })
-        socket.on('debugg', (data) => {
+        socket.on('debug-message', (data) => {
             console.log(data);
-            socket.emit('debug',data);
         })
         socket.on('connect-event', (data) => {
             console.log(data);
@@ -47,7 +46,7 @@
                 })
             })
             $('#emitToServer').click(function () {
-                socket.emit('serveremit','hello-server!');
+                socket.emit('debug','hello-server!');
             })
         })
 
@@ -56,9 +55,9 @@
 
 <body>
     <h1>NavBar em ei </h1>
-    <button class="click">action</button>
-    <button class="test">normal</button>
-    <button id="emitToServer">emit to server </button>
+    <!-- <button class="click">action</button>
+    <button class="test">normal</button> -->
+    <button id="emitToServer">emit to server (F12 to check response)</button>
 </body>
 
 </html>

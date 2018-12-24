@@ -34,7 +34,8 @@ function login(req, res) {
                         let token = TokenHelper.generateToken(userInfo);
                         req.session.user = {
                             email,
-                            role: userFound.role
+                            role: userFound.role,
+                            token
                         };
                         res.status(200).json({ success: 1, message: 'logging in, navigate to app front page', token, userFound });
                     }

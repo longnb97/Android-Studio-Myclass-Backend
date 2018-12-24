@@ -75,10 +75,10 @@ socketHelper.io.on('connection', (socket) => {
   //debugger
   socket.on('debug', (data) => {
     console.log(data)
-    socket.emit('debug-message', 'ok');
+    socket.emit('debug-message', 'emiteeeeeeeeeeeeeeedddddddddddddddddddddd');
   })
 
-  // event quet the
+  // Arduino (event quet the)
   socket.on('card', async (cardNumber) => {
     let userExisted = await UserHelper.isExisted(cardNumber);
     if (!userExisted) socket.emit('update-error', 'not found'); //mobile app response
@@ -107,7 +107,7 @@ mongoose.connect(
 const cors = require('cors');
 app.use(function (req, res, next) {
   // origins that are allowed to make a request to server
-  var allowedOrigins = ['http://localhost:1234', 'http://localhost:4200', 'http://localhost:4300', 'http://localhost:5000'];
+  var allowedOrigins = ['http://localhost:4200', 'http://localhost:8100'];
   var origin = req.headers.origin;
   if (allowedOrigins.indexOf(origin) > -1) {
     res.setHeader('Access-Control-Allow-Origin', origin);
@@ -144,6 +144,7 @@ app.use(jwtCheck.unless({
     '/index.html',
     '/favicon.ico',
     '/auth/session',
+
   ]
 }))
 
@@ -187,3 +188,4 @@ app.use(function (err, req, res, next) {
     res.status(401).send('Invalid token');
   }
 });
+
