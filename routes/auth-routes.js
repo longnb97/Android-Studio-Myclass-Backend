@@ -32,12 +32,13 @@ function login(req, res) {
                         const { email, displayName, cardNumber } = userFound;
                         const userInfo = { email, displayName, cardNumber };
                         let token = TokenHelper.generateToken(userInfo);
+                        const a = req.session.user;
                         req.session.user = {
                             email,
                             role: userFound.role,
                             token
                         };
-                        res.status(200).json({ success: 1, message: 'logging in, navigate to app front page', token, userFound });
+                        res.status(200).json({ success: 1, message: 'logging in, navigate to app front page', token, userFound, a });
                     }
                 }
             }
