@@ -7,6 +7,7 @@ const express = require("express"),
 
 const logger = require('morgan');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const path = require('path');
 const session = require('express-session');
 
@@ -42,6 +43,7 @@ server.listen(PORT, console.log(`Server listening at ${PORT}`));
 /*
  * session configs
  */
+app.use(cookieParser());
 app.use(session({
   secret: key.session,
   resave: false,
@@ -51,6 +53,7 @@ app.use(session({
     maxAge: 1000 * 60 * 60 * 24
   }
 }))
+
 
 //keep user logged in 
 const sessionChecker = (req, res, next) => {
