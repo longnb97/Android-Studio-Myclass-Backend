@@ -16,7 +16,7 @@ router.post('/googleLogin', loginWithGoogle);
 
 router.get('/session', (req, res) => {
     if (!req.session.user) res.json('nothing here');
-    else res.send(req.session.user);
+    else res.json({message:"okkk", data: req.session.user});
 });
 
 function login(req, res) {
