@@ -65,6 +65,8 @@ app.get('/', sessionChecker);
  */
 socketHelper.configure(server);
 socketHelper.io.on('connection', (socket) => {
+  //welcome
+  socket.emit('welcome', 'hello');
 
   // on connection, disconnection
   socketHelper.connectEvent(socket);
@@ -75,7 +77,7 @@ socketHelper.io.on('connection', (socket) => {
   //debugger
   socket.on('debug', (data) => {
     console.log(data)
-    socket.emit('debug-message', 'emiteeeeeeeeeeeeeeedddddddddddddddddddddd');
+    socket.emit('debug-message', 'chuc mung ban da connect dc vao day hehe');
   })
 
   // Arduino (event quet the)
