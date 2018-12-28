@@ -12,5 +12,5 @@ function generateToken(userInfo) {
 
 function decodeToken(token){
     let decoded = jwt.verify(token, key.jwtSecret);
-    return decoded._id;
+    return decoded;
 }

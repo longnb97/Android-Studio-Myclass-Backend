@@ -8,7 +8,7 @@ const express = require("express"),
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
-const session = require('express-session');
+// const session = require('express-session');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -44,25 +44,17 @@ server.listen(PORT, console.log(`Server listening at ${PORT}`));
 /*
  * session configs
  */
-app.use(session({
-  secret: key.session,
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    path:'/',
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 24,
-  }
-}))
+// app.use(session({
+//   secret: key.session,
+//   resave: false,
+//   saveUninitialized: false,
+//   cookie: {
+//     path:'/',
+//     secure: false,
+//     maxAge: 1000 * 60 * 60 * 24,
+//   }
+// }))
 
-
-//keep user logged in 
-const sessionChecker = (req, res, next) => {
-  if (req.session.user) res.send({ message: " user logged in, navigate to dashboard" });
-  else res.send('navigate to login route');
-};
-
-app.get('/', sessionChecker);
 
 /*
  * setting up socket.io : singleton design pattern
