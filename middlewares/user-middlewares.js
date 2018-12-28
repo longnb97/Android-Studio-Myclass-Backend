@@ -1,16 +1,13 @@
 const User = require('../models/user-model');
+const TokenHelper = require('../helpers/token-helpers');
 
 module.exports = {
     isAdmin
 }
 
 function isAdmin(req, res, next) {
-    console.log(req.session.user);
-    if (!req.session.user || !req.session.user.email || !req.session.user.role) res.status(403).json({ message:'session empty' });
-    else {
-        console.log('else')
-        if (req.session.user.role === 'admin') next();
-        else res.status(403).json({ messsage: 'method not allowed' });
-    }
-    // next();
+    let authorizationHeader = req.headers['Authorization'];
+    let token = authorizationHeader.split('')[0]
+    console.log(token);
+    next();
 }

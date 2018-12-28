@@ -7,7 +7,6 @@ const express = require("express"),
 
 const logger = require('morgan');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
 const path = require('path');
 const session = require('express-session');
 
@@ -40,17 +39,19 @@ const PORT = process.env.PORT || 5050;
 let server = http.Server(app); // http.createServer = http.Server
 server.listen(PORT, console.log(`Server listening at ${PORT}`));
 
+
+
 /*
  * session configs
  */
-app.use(cookieParser());
 app.use(session({
   secret: key.session,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
   cookie: {
+    path:'/',
     secure: false,
-    maxAge: 1000 * 60 * 60 * 24
+    maxAge: 1000 * 60 * 60 * 24,
   }
 }))
 
@@ -106,23 +107,7 @@ mongoose.connect(
   err => { if (!err) console.log('DB CONNECT SUCCESS') }
 )
 
-/*
- * setting up cors
- */
-const cors = require('cors');
-app.use(function (req, res, next) {
-  // origins that are allowed to make a request to server
-  var allowedOrigins = ['http://localhost:4200', 'http://localhost:8100'];
-  var origin = req.headers.origin;
-  if (allowedOrigins.indexOf(origin) > -1) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  //res.header('Access-Control-Allow-Origin', 'http://127.0.0.1:8020');
-  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.header('Access-Control-Allow-Credentials', true);
-  return next();
-});
+
 
 /*
  * setting up jwt-unless
@@ -151,7 +136,25 @@ app.use(jwtCheck.unless({
     '/auth/session',
 
   ]
-}))
+})) 
+
+/*
+ * setting up cors
+ */
+const cors = require('cors');
+app.use(function (req, res, next) {
+  // origins that are allowed to make a request to server
+  var allowedOrigins = ['http://localhost:4200', 'http://localhost:8100', 'http://localhost:5000'];
+  var origin = req.headers.origin;
+  if (allowedOrigins.indexOf(origin) > -1) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  // res.header('Access-Control-Allow-Origin', allowedOrigins);
+  res.header('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.header('Access-Control-Allow-Credentials', true);
+  return next();
+});
 
 /*
  * setting up libraries
