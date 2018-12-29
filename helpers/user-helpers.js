@@ -29,10 +29,13 @@ function updateTime(req, res) {
         .then(userfound => {
             if (!userfound) res.status(404).json({ user: userfound })
             else {
+                console.log(userfound)
+              
                 if (userfound.status === ' ') {
                     // update checkOut time
-                    let data = { checkIn: now, checkOut: 'null' };
+                    let data = { checkIn: now, checkOut: null };
                     userfound.appearance.push(data);
+                    console.log(data)
                     userfound.status = 'in';
                     return userfound.save();
                 }
@@ -81,7 +84,7 @@ function updateTimee(data) {
             else {
                 if (userfound.status === ' ') {
                     // update checkOut time
-                    let data = { checkIn: now, checkOut: 'null' };
+                    let data = { checkIn: now, checkOut: null };
                     userfound.appearance.push(data);
                     userfound.status = 'in';
                     return userfound.save();
