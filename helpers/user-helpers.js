@@ -76,38 +76,43 @@ function getSelfSchedule(req, res) {
 }
 
 function updateTimee(data) {
-    console.log(data);
-    let now = new Date();
-    User.findOne({ cardNumber: data })
-        .then(userfound => {
-            if (!userfound) return 'not found'
-            else {
-                if (userfound.status === ' ') {
-                    // update checkOut time
-                    let data = { checkIn: now, checkOut: null };
-                    userfound.appearance.push(data);
-                    userfound.status = 'in';
-                    return userfound.save();
+    return new Promise((resolve, reject) => {
+        let now = new Date();
+        User.findOne({ cardNumber: data })
+            .then(userfound => {
+                if (!userfound) return 'not found'
+                else {
+                    if (userfound.status === ' ') {
+
+                        // update checkOut time
+                        let data = { checkIn: now, checkOut: null };
+                        userfound.appearance.push(data);
+                        userfound.status = 'in';
+                        return userfound.save();
+                    }
+                    if (userfound.status === 'in') {
+                        // update checkOut time
+                        let lastIndex = userfound.appearance.length - 1;
+                        userfound.appearance[lastIndex].checkOut = now;
+                        userfound.status = 'out';
+                        return userfound.save();
+                    }
+                    else if (userfound.status === 'out') {
+                        // update checkIn time
+                        let data = { checkIn: now, checkOut: null };
+                        userfound.appearance.push(data);
+                        userfound.status = 'in';
+                        return userfound.save();
+                    }
+                    else return { message: 'Bad request' };
                 }
-                if (userfound.status === 'in') {
-                    // update checkOut time
-                    let lastIndex = userfound.appearance.length - 1;
-                    userfound.appearance[lastIndex].checkOut = now;
-                    userfound.status = 'out';
-                    return userfound.save();
-                }
-                else if (userfound.status === 'out') {
-                    // update checkIn time
-                    let data = { checkIn: now, checkOut: null };
-                    userfound.appearance.push(data);
-                    userfound.status = 'in';
-                    return userfound.save();
-                }
-                else return { message: 'Bad request' };
-            }
-        })
-        .then(updatedTime => {'updated', updatedTime })
-        .catch(err => err );
+            })
+            .then(function (data) {
+                resolve('aaa');
+            })
+            .catch(err => err);
+    })
+
 }
 
 //admin only
