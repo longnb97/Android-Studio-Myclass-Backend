@@ -74,7 +74,7 @@ socketHelper.io.on('connection', (socket) => {
     socket.emit('debug-message', 'chuc mung ban da connect dc vao day hehe');
   })
 
-  // Arduino (event quet the)
+  // Arduino (event quet the) 
   socket.on('card', async (cardNumber) => {
     console.log('card');
     // let userExisted = await UserHelper.isExisted(cardNumber);
