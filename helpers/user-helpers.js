@@ -73,6 +73,7 @@ function getSelfSchedule(req, res) {
 }
 
 function updateTimee(data) {
+    console.log(data);
     let now = new Date();
     User.findOne({ cardNumber: data })
         .then(userfound => {

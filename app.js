@@ -61,8 +61,6 @@ server.listen(PORT, console.log(`Server listening at ${PORT}`));
  */
 socketHelper.configure(server);
 socketHelper.io.on('connection', (socket) => {
-  //welcome
-  socket.emit('welcome', 'hello');
 
   // on connection, disconnection
   socketHelper.connectEvent(socket);
@@ -78,6 +76,7 @@ socketHelper.io.on('connection', (socket) => {
 
   // Arduino (event quet the)
   socket.on('card', async (cardNumber) => {
+    console.log('card');
     let userExisted = await UserHelper.isExisted(cardNumber);
     if (!userExisted) socket.emit('update-error', 'not found'); //mobile app response
     else {
@@ -98,8 +97,6 @@ mongoose.connect(
   { useNewUrlParser: true },
   err => { if (!err) console.log('DB CONNECT SUCCESS') }
 )
-
-
 
 /*
  * setting up jwt-unless
@@ -126,9 +123,8 @@ app.use(jwtCheck.unless({
     '/index.html',
     '/favicon.ico',
     '/auth/session',
-
   ]
-})) 
+}))
 
 /*
  * setting up cors
