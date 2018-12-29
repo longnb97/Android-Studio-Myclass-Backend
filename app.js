@@ -81,8 +81,8 @@ socketHelper.io.on('connection', (socket) => {
     // if (!userExisted) socket.emit('update-error', 'not found'); //mobile app response
     // else {
       //check in or check out
-      let updateQueue = await UserHelper.updateTimee(cardNumber);
-      socket.emit('mobile-response', { updateQueue, message: 'time updated' }); //mobile app response
+      let message = await UserHelper.updateTimee(cardNumber);
+      socket.emit('mobile-response', message); //mobile app response
     // }
   })
 

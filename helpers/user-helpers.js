@@ -77,7 +77,7 @@ function updateTimee(data) {
     let now = new Date();
     User.findOne({ cardNumber: data })
         .then(userfound => {
-            if (!userfound) res.status(404).json({ user: userfound });
+            if (!userfound) return 'not found'
             else {
                 if (userfound.status === 'in') {
                     // update checkOut time
@@ -96,8 +96,8 @@ function updateTimee(data) {
                 else res.status(400).json({ message: 'Bad request' });
             }
         })
-        .then(updatedTime => res.status(200).json({ message: 'updated', updatedTime }))
-        .catch(err => res.status(500).json(err));
+        .then(updatedTime => {'updated', updatedTime })
+        .catch(err => err );
 }
 
 //admin only
