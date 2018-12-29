@@ -79,6 +79,13 @@ function updateTimee(data) {
         .then(userfound => {
             if (!userfound) return 'not found'
             else {
+                if (userfound.status === ' ') {
+                    // update checkOut time
+                    let data = { checkIn: now, checkOut: 'null' };
+                    userfound.appearance.push(data);
+                    userfound.status = 'in';
+                    return userfound.save();
+                }
                 if (userfound.status === 'in') {
                     // update checkOut time
                     let lastIndex = userfound.appearance.length - 1;
@@ -93,7 +100,7 @@ function updateTimee(data) {
                     userfound.status = 'in';
                     return userfound.save();
                 }
-                else res.status(400).json({ message: 'Bad request' });
+                else return { message: 'Bad request' };
             }
         })
         .then(updatedTime => {'updated', updatedTime })
