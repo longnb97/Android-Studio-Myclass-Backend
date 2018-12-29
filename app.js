@@ -77,13 +77,13 @@ socketHelper.io.on('connection', (socket) => {
   // Arduino (event quet the)
   socket.on('card', async (cardNumber) => {
     console.log('card');
-    let userExisted = await UserHelper.isExisted(cardNumber);
-    if (!userExisted) socket.emit('update-error', 'not found'); //mobile app response
-    else {
+    // let userExisted = await UserHelper.isExisted(cardNumber);
+    // if (!userExisted) socket.emit('update-error', 'not found'); //mobile app response
+    // else {
       //check in or check out
       let updateQueue = await UserHelper.updateTimee(cardNumber);
       socket.emit('mobile-response', { updateQueue, message: 'time updated' }); //mobile app response
-    }
+    // }
   })
 
   //comming soon
